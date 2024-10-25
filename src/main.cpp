@@ -4,6 +4,9 @@
 #include "Adafruit_PWMServoDriver.h"
 #include "SPI.h"
 
+#include "pca9685.h"
+
+
 //FWD SET
 #define ALPHA_IN1 8
 #define ALPHA_IN2 9
@@ -24,10 +27,15 @@ CustomArduino::L289n* charlieM= new CustomArduino::L289n(CHARLIE_IN1,CHARLIE_IN2
 CustomArduino::L289n* deltaM= new CustomArduino::L289n(DELTA_IN1,DELTA_IN2,30);
 Generic::Holonomic chasis;
 
+//handle arm
+Adafruit_PWMServoDriver pwmDriver = Adafruit_PWMServoDriver();
+CustomArduino::ChannelPCA9685 channel1(0,180,0);
+uint8_t servonum = 0;
+
 void driveWheels();
 void driveWheelsB();
 void chasisSquare();
-
+void servoTest();
 void setup() {
   // put your setup code here, to run once:
   alphaM->SetUp();
@@ -38,26 +46,66 @@ void setup() {
   //alphaM.DriveFWD();*&
   chasis = Generic::Holonomic (alphaM,betaM,charlieM,deltaM);
 
+  //pwm  driver setup
+  pwmDriver.begin();
+  pwmDriver.setOscillatorFrequency(27000000);
+  pwmDriver.setPWMFreq(SERVO_FREQ);  // Analog servos run at ~50 Hz updates
+
+  //channel setup
+  channel1.Attach(&pwmDriver);
+  
+  //pwmDriver.setPWM(0,0,2048);
+
+
+  
+}
+
+void setServoPulse(uint8_t n, double pulse) {
+  double pulselength;
+  
+  pulselength = 1000000;   // 1,000,000 us per second
+  pulselength /= SERVO_FREQ;   // Analog servos run at ~60 Hz updates
+  Serial.print(pulselength); Serial.println(" us per period"); 
+  pulselength /= 4096;  // 12 bits of resolution
+  Serial.print(pulselength); Serial.println(" us per bit"); 
+  pulse *= 1000000;  // convert input seconds to us
+  pulse /= pulselength;
+  Serial.println(pulse);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  Serial.println("achasis drive");
+  //Serial.println("achasis drive");
 
   //chasis.DriveFWD();
   //delay(1000);
   //chasisSquare();
 
-  chasis.DriveFWDLFT();
-  delay(1000);
-  chasis.DriveBWDLFT();
-  delay(1000);
-  chasis.DriveFWDRGT();
-  delay(1000);
-  chasis.DriveBWDRGT(); 
-  delay(1000);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+  //chasis.DriveFWDLFT();
+  //delay(1000);
+  //chasis.DriveBWDLFT();
+  //delay(1000);
+  ///chasis.DriveFWDRGT();
+  //delay(1000);
+  //chasis.DriveBWDRGT(); 
+  
+  servoTest();
+  
+  
+}
 
-
+void servoTest(){
+  //need to write degrees
+  for(int i = 0; i< 180;i++){
+    channel1.WriteDeg(i);
+    Serial.println(i);
+    delay(10);
+  }
+   for(int i = 180; i> 0;i--){
+    channel1.WriteDeg(i);
+    Serial.println(i);
+    delay(10);
+  }  Serial.println(channel1.WhereIThinkIAm());
 }
 
 void chasisSquare(){

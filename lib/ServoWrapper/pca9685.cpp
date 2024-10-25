@@ -1,11 +1,14 @@
 #include "pca9685.h"
+#include "Arduino.h"
 
-//TODO:move to servo object
+// TODO:move to servo object
 void CustomArduino::ChannelPCA9685::SetSpeed(const int &dutyCyclePerc)
 {
     //using percentage, so 0-100
-    float percent = dutyCyclePerc/100;
-    this->parent->setPWM(this->channelIdx,0,this->resolution*percent);
+    double ratio = static_cast<double>(dutyCyclePerc) /100;
+    uint16_t percent = static_cast<uint16_t>((SERVOMAX-SERVOMIN)*ratio + SERVOMIN);
+    
+    this->parent->setPWM(this->channelIdx,0,percent);
 }
 
 void CustomArduino::ChannelPCA9685::Attach(Adafruit_PWMServoDriver *parent)
@@ -16,8 +19,8 @@ void CustomArduino::ChannelPCA9685::Attach(Adafruit_PWMServoDriver *parent)
 void CustomArduino::ChannelPCA9685::WriteDeg(const float& degrees){
 
     //convert degrees to percent
-    int percent = static_cast<int>((degrees-this->minDegrees)/this->maxDegrees);
-    SetSpeed(percent);
+    float percent = ((degrees-this->minDegrees)/this->maxDegrees);
+    SetSpeed(static_cast<int>(percent*100));
 }
 
 void CustomArduino::ChannelPCA9685::SetUp()

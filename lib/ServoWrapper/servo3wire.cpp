@@ -67,9 +67,7 @@ void Generic::Servo::WriteRad2Deg(const float &radians)
     this->WriteDeg(static_cast<int>(deg) % FULL_CIRCLE_DEGREE);
 }
 
-
-
-
-
-
-
+float Generic::Servo::WhereIThinkIAm()
+{
+    return this->pwmPin.value;
+}

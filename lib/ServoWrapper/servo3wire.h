@@ -30,5 +30,7 @@ class Servo:public Motor{
 
         virtual void WriteDeg(const float& degrees);
         virtual void WriteRad2Deg(const float& radians);
+
+        float WhereIThinkIAm();
 };
 };
