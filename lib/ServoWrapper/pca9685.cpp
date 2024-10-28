@@ -7,8 +7,8 @@ void CustomArduino::ChannelPCA9685::SetSpeed(const int &dutyCyclePerc)
     //using percentage, so 0-100
     double ratio = static_cast<double>(dutyCyclePerc) /100;
     uint16_t percent = static_cast<uint16_t>((SERVOMAX-SERVOMIN)*ratio + SERVOMIN);
-    
-    this->parent->setPWM(this->channelIdx,0,percent);
+    Serial.println(this->pwmPin.pin);
+    this->parent->setPWM(this->pwmPin.pin,0,percent);
 }
 
 void CustomArduino::ChannelPCA9685::Attach(Adafruit_PWMServoDriver *parent)

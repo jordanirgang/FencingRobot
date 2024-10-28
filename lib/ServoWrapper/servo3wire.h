@@ -13,9 +13,8 @@
 
 namespace Generic{
 class Servo:public Motor{
-    private:
-        PinGroup<int> pwmPin;
     protected:
+        PinGroup<int> pwmPin;
         float maxDegrees;
         float minDegrees;
     public:
