@@ -1,0 +1,130 @@
+<?xml version= "1.0" encoding="utf-8"?>
+<robot name="3_joint_arm">
+
+	<link name="link_dummy">
+   </link>
+
+	<link name="link_origin">
+		<inertial>
+			<origin xyz="0 0 .5" rpy="0 0 0"/>
+			<mass value="1"/>
+			<inertia ixx="0" ixy="0" ixz= "0" iyy="0" iyz="0" izz="0"/>
+		</inertial>
+		<visual>
+			<geometry>
+				<box size="1 1 1"/>
+			</geometry>
+		</visual>
+		<collision>
+			<geometry>
+				<box size="1 1 1"/>
+			</geometry>
+		</collision>	
+	</link>
+
+	<joint name="joint_dummy" type="fixed">
+		<parent link="link_dummy"/>
+		<child link="link_origin"/>
+	</joint>
+
+	<link name="link_0">
+		<inertial>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<mass value="1"/>
+			<inertia ixx="0" ixy="0" ixz= "0" iyy="0" iyz="0" izz="0"/>
+		</inertial>
+		<visual>
+			<origin xyz="0 0 .5" rpy="0 0 0"/>
+			<geometry>
+				<cylinder radius=".125" length="1"/>
+			</geometry>
+		</visual>
+		<collision>
+			<origin xyz="0 0 .5" rpy="0 1.57 0"/>
+			<geometry>
+				<cylinder radius=".125" length="1"/>
+			</geometry>
+		</collision>
+		<visual>
+			<origin xyz="0 0 1" rpy="1.57 0 1.57"/>
+			<geometry>
+				<box size=".25 .5 .25"/>
+			</geometry>
+		</visual>
+	</link>
+	
+	<joint name="joint_origin_to_link0" type="continuous">
+		<origin xyz=".5 0 0" rpy="0 1.57 0"/>
+		<parent link="link_origin"/>
+		<child link="link_0"/>
+		<axis xyz="0 0 1"/>
+	</joint>
+
+ 	 <link name="link_1">
+		<inertial>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<mass value="1"/>
+			<inertia ixx="0" ixy="0" ixz= "0" iyy="0" iyz="0" izz="0"/>
+		</inertial>
+		<visual>
+			<origin xyz="0 0 .5" rpy="0 0 0"/>
+			<geometry>
+				<cylinder radius=".125" length="1"/>
+			</geometry>
+		</visual>
+		<collision>
+			<origin xyz="0 0 .5" rpy="0 1.57 0"/>
+			<geometry>
+				<cylinder radius=".125" length="1"/>
+			</geometry>
+		</collision>
+		<visual>
+			<origin xyz="0 0 1" rpy="1.57 0 1.57"/>
+			<geometry>
+				<box size=".25 .5 .25"/>
+			</geometry>
+		</visual>
+	</link>
+
+	<joint name="joint_link0_to_link1" type="continuous">
+                <origin xyz="0 0 1" rpy="0 0 0"/>
+                <parent link="link_0"/>
+                <child link="link_1"/>
+                <axis xyz="1 0 0"/>
+
+	</joint>
+
+	<link name="link_2">
+		<inertial>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<mass value="1"/>
+			<inertia ixx="0" ixy="0" ixz= "0" iyy="0" iyz="0" izz="0"/>
+		</inertial>
+		<visual>
+			<origin xyz="0 0 .5" rpy="0 0 0"/>
+			<geometry>
+				<cylinder radius=".125" length="1"/>
+			</geometry>
+		</visual>
+		<collision>
+			<origin xyz="0 0 .5" rpy="0 1.57 0"/>
+			<geometry>
+				<cylinder radius=".125" length="1"/>
+			</geometry>
+		</collision>
+		<visual>
+			<origin xyz="0 0 1" rpy="1.57 0 1.57"/>
+			<geometry>
+				<sphere radius=".25"/>
+			</geometry>
+		</visual>
+	</link>
+
+	<joint name="joint_link1_to_link2" type="continuous">
+                <origin xyz="0 0 1" rpy="0 0 0"/>
+                <parent link="link_1"/>
+                <child link="link_2"/>
+                <axis xyz="1 0 0"/>
+	</joint>
+			
+</robot>
