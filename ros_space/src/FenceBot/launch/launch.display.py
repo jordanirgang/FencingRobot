@@ -51,6 +51,13 @@ def generate_launch_description():
         name="joint_state_publisher_gui",
         parameters=[params]
     )
+
+    angle_publisher = Node(
+        package="FenceBot",
+        executable="anglepub",
+        name="anglepub"
+    )
+
     return LaunchDescription([
         DeclareLaunchArgument(
             'use_sim_time',
@@ -60,4 +67,5 @@ def generate_launch_description():
             robot_state_pub,
             robot_joint_pub,
             robot_joint_pub_gui
+            #angle_publisher
     ])
