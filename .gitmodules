@@ -1,0 +1,3 @@
+[submodule "lib/PlatformIOServoMotor"]
+	path = lib/PlatformIOServoMotor
+	url = git@github.com:jordanirgang/PlatformIOServoMotor.git
