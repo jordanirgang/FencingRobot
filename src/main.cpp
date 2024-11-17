@@ -4,6 +4,8 @@
 #include "Adafruit_PWMServoDriver.h"
 #include "SPI.h"
 
+#include <Kinematics.h>
+
 #include "pca9685.h"
 
 
@@ -30,12 +32,17 @@ Generic::Holonomic chasis;
 //handle arm
 Adafruit_PWMServoDriver pwmDriver = Adafruit_PWMServoDriver();
 CustomArduino::ChannelPCA9685 channel1(0,180,0);
+CustomArduino::ChannelPCA9685 channel2(1,180,0);
+Kinematics RRR = Kinematics(1,1);
+
 uint8_t servonum = 0;
 
 void driveWheels();
 void driveWheelsB();
 void chasisSquare();
 void servoTest();
+void kinematicsTest();
+
 void setup() {
   // put your setup code here, to run once:
   alphaM->SetUp();
@@ -53,24 +60,11 @@ void setup() {
 
   //channel setup
   channel1.Attach(&pwmDriver);
-  
+  channel2.Attach(&pwmDriver);
   //pwmDriver.setPWM(0,0,2048);
 
 
   
-}
-
-void setServoPulse(uint8_t n, double pulse) {
-  double pulselength;
-  
-  pulselength = 1000000;   // 1,000,000 us per second
-  pulselength /= SERVO_FREQ;   // Analog servos run at ~60 Hz updates
-  Serial.print(pulselength); Serial.println(" us per period"); 
-  pulselength /= 4096;  // 12 bits of resolution
-  Serial.print(pulselength); Serial.println(" us per bit"); 
-  pulse *= 1000000;  // convert input seconds to us
-  pulse /= pulselength;
-  Serial.println(pulse);
 }
 
 void loop() {
@@ -89,20 +83,24 @@ void loop() {
   //delay(1000);
   //chasis.DriveBWDRGT(); 
   
-  servoTest();
+  //servoTest();
   
+  kinematicsTest();
   
 }
+
 
 void servoTest(){
   //need to write degrees
   for(int i = 0; i< 180;i++){
     channel1.WriteDeg(i);
+    channel2.WriteDeg(180-i);
     Serial.println(i);
     delay(10);
   }
    for(int i = 180; i> 0;i--){
     channel1.WriteDeg(i);
+    channel2.WriteDeg(180-i);
     Serial.println(i);
     delay(10);
   }  Serial.println(channel1.WhereIThinkIAm());
