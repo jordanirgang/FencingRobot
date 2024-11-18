@@ -6,3 +6,5 @@
 ros_space/build/*
 ros_space/log/*
 ros_space/install/*
+
+lib/thirdparty/*
